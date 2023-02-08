@@ -1,0 +1,85 @@
+{
+    "name": "mezzio/mezzio-hal",
+    "description": "Hypertext Application Language implementation for PHP and PSR-7",
+    "license": "BSD-3-Clause",
+    "keywords": [
+        "laminas",
+        "mezzio",
+        "hal",
+        "http",
+        "psr",
+        "psr-7",
+        "psr-11",
+        "psr-13",
+        "rest"
+    ],
+    "homepage": "https://mezzio.dev",
+    "support": {
+        "docs": "https://docs.mezzio.dev/mezzio-hal/",
+        "issues": "https://github.com/mezzio/mezzio-hal/issues",
+        "source": "https://github.com/mezzio/mezzio-hal",
+        "rss": "https://github.com/mezzio/mezzio-hal/releases.atom",
+        "chat": "https://laminas.dev/chat",
+        "forum": "https://discourse.laminas.dev"
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "laminas": {
+            "config-provider": "Mezzio\\Hal\\ConfigProvider"
+        }
+    },
+    "require": {
+        "php": "^7.3 || ~8.0.0 || ~8.1.0",
+        "ext-dom": "*",
+        "ext-json": "*",
+        "psr/http-message": "^1.0.1",
+        "psr/link": "^1.0",
+        "willdurand/negotiation": "^3.0"
+    },
+    "require-dev": {
+        "doctrine/orm": "^2.9.4",
+        "laminas/laminas-coding-standard": "~2.3.0",
+        "laminas/laminas-hydrator": "^4.3",
+        "laminas/laminas-paginator": "^2.11",
+        "mezzio/mezzio-helpers": "^5.7",
+        "phpspec/prophecy-phpunit": "^2.0",
+        "phpunit/phpunit": "^9.5.8",
+        "psalm/plugin-phpunit": "^0.15.0",
+        "vimeo/psalm": "^4.3"
+    },
+    "provide": {
+        "psr/link-implementation": "1.0"
+    },
+    "suggest": {
+        "laminas/laminas-hydrator": "^4.3 in order to use the ResourceGenerator to create Resource instances from objects",
+        "laminas/laminas-paginator": "^2.11 in order to provide paginated collections",
+        "mezzio/mezzio-helpers": "^5.7 in order to use UrlHelper/ServerUrlHelper-based MezzioUrlGenerator with the LinkGenerator",
+        "psr/container-implementation": "^1.0 in order to use the provided PSR-11 factories"
+    },
+    "autoload": {
+        "psr-4": {
+            "Mezzio\\Hal\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "MezzioTest\\Hal\\": "test/"
+        }
+    },
+    "scripts": {
+        "check": [
+            "@cs-check",
+            "@test"
+        ],
+        "cs-check": "phpcs",
+        "cs-fix": "phpcbf",
+        "static-analysis": "psalm --shepherd --stats",
+        "test": "phpunit --colors=always",
+        "test-coverage": "phpunit --colors=always --coverage-clover clover.xml"
+    },
+    "conflict": {
+        "zendframework/zend-expressive-hal": "*"
+    }
+}
