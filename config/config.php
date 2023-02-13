@@ -14,10 +14,23 @@ $cacheConfig = [
 ];
 
 $aggregator = new ConfigAggregator([
+    \Mezzio\Hal\ConfigProvider::class,
+    \DoctrineORMModule\ConfigProvider::class,
+    \Laminas\Cache\ConfigProvider::class,
+    \DoctrineModule\ConfigProvider::class,
+    \Laminas\Form\ConfigProvider::class,
+    \Laminas\Hydrator\ConfigProvider::class,
+    \Laminas\InputFilter\ConfigProvider::class,
+    \Laminas\Filter\ConfigProvider::class,
+    \Laminas\Paginator\ConfigProvider::class,
+    \Mezzio\Tooling\ConfigProvider::class,
     \Mezzio\LaminasView\ConfigProvider::class,
     \Mezzio\Helper\ConfigProvider::class,
-    \Mezzio\Router\FastRouteRouter\ConfigProvider::class,
+    \Mezzio\Router\LaminasRouter\ConfigProvider::class,
+    \Laminas\Router\ConfigProvider::class,
     \Laminas\HttpHandlerRunner\ConfigProvider::class,
+    \Laminas\Validator\ConfigProvider::class,
+ 
     // Include cache configuration
     new ArrayProvider($cacheConfig),
     ConfigProvider::class,

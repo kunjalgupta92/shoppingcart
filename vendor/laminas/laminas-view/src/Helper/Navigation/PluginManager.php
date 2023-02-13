@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laminas\View\Helper\Navigation;
 
-use Interop\Container\ContainerInterface;
-use Laminas\ServiceManager\ConfigInterface;
+use Interop\Container\ContainerInterface; // phpcs:ignore
 use Laminas\ServiceManager\Factory\InvokableFactory;
+use Laminas\ServiceManager\ServiceManager;
 use Laminas\View\HelperPluginManager;
 
 /**
@@ -13,9 +15,14 @@ use Laminas\View\HelperPluginManager;
  * Enforces that helpers retrieved are instances of
  * Navigation\HelperInterface. Additionally, it registers a number of default
  * helpers.
+ *
+ * @template InstanceType of HelperInterface|AbstractHelper
+ * @psalm-import-type ServiceManagerConfiguration from ServiceManager
+ * @extends HelperPluginManager<InstanceType>
  */
 class PluginManager extends HelperPluginManager
 {
+    /** {@inheritDoc} */
     protected $instanceOf = AbstractHelper::class;
 
     /**
@@ -30,20 +37,22 @@ class PluginManager extends HelperPluginManager
         'sitemap'     => Sitemap::class,
 
         // Legacy Zend Framework aliases
-        \Zend\View\Helper\Navigation\Breadcrumbs::class => Breadcrumbs::class,
-        \Zend\View\Helper\Navigation\Links::class => Links::class,
-        \Zend\View\Helper\Navigation\Menu::class => Menu::class,
-        \Zend\View\Helper\Navigation\Sitemap::class => Sitemap::class,
+        'Zend\View\Helper\Navigation\Breadcrumbs' => Breadcrumbs::class,
+        'Zend\View\Helper\Navigation\Links'       => Links::class, // phpcs:ignore
+        'Zend\View\Helper\Navigation\Menu'        => Menu::class,
+        'Zend\View\Helper\Navigation\Sitemap'     => Sitemap::class,
 
         // v2 normalized FQCNs
         'zendviewhelpernavigationbreadcrumbs' => Breadcrumbs::class,
-        'zendviewhelpernavigationlinks' => Links::class,
-        'zendviewhelpernavigationmenu' => Menu::class,
-        'zendviewhelpernavigationsitemap' => Sitemap::class,
+        'zendviewhelpernavigationlinks'       => Links::class,
+        'zendviewhelpernavigationmenu'        => Menu::class,
+        'zendviewhelpernavigationsitemap'     => Sitemap::class,
     ];
 
     /**
      * Default factories
+     *
+     * {@inheritDoc}
      */
     protected $factories = [
         Breadcrumbs::class => InvokableFactory::class,
@@ -52,7 +61,6 @@ class PluginManager extends HelperPluginManager
         Sitemap::class     => InvokableFactory::class,
 
         // v2 canonical FQCNs
-
         'laminasviewhelpernavigationbreadcrumbs' => InvokableFactory::class,
         'laminasviewhelpernavigationlinks'       => InvokableFactory::class,
         'laminasviewhelpernavigationmenu'        => InvokableFactory::class,
@@ -60,19 +68,19 @@ class PluginManager extends HelperPluginManager
     ];
 
     /**
-     * @param null|ConfigInterface|ContainerInterface $configOrContainerInstance
-     * @param array $v3config If $configOrContainerInstance is a container, this
-     *     value will be passed to the parent constructor.
+     * @param ContainerInterface $configOrContainerInstance
+     * @param array $v3config
+     * @psalm-param ServiceManagerConfiguration $v3config
      */
     public function __construct($configOrContainerInstance = null, array $v3config = [])
     {
-        /** @psalm-suppress MissingClosureParamType */
+        /** @psalm-suppress UnusedClosureParam, MissingClosureParamType */
         $this->initializers[] = function (ContainerInterface $container, $instance): void {
             if (! $instance instanceof AbstractHelper) {
                 return;
             }
 
-            $instance->setServiceLocator($container);
+            $instance->setServiceLocator($this->creationContext);
         };
 
         parent::__construct($configOrContainerInstance, $v3config);

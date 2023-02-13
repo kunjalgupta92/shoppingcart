@@ -4,37 +4,60 @@ declare(strict_types=1);
 
 namespace Mezzio\Tooling\Factory;
 
+use Mezzio\Tooling\Factory\Create;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class CreateFactoryCommand extends Command
+use function sprintf;
+
+final class CreateFactoryCommand extends Command
 {
+    /**
+     * @var string
+     */
     public const DEFAULT_SRC = '/src';
 
-    public const HELP = <<< 'EOT'
-Creates a factory class file for generating the provided class, in the
-same directory as the provided class.
-EOT;
+    /**
+     * @var string
+     */
+    public const HELP = <<<'EOT'
+        Creates a factory class file for generating the provided class, in the
+        same directory as the provided class.
+        EOT;
 
-    public const HELP_ARG_CLASS = <<< 'EOT'
-Fully qualified class name of the class for which to create a factory.
-This value should be quoted to ensure namespace separators are not
-interpreted as escape sequences by your shell. The class should be
-autoloadable.
-EOT;
+    /**
+     * @var string
+     */
+    public const HELP_ARG_CLASS = <<<'EOT'
+        Fully qualified class name of the class for which to create a factory.
+        This value should be quoted to ensure namespace separators are not
+        interpreted as escape sequences by your shell. The class should be
+        autoloadable.
+        EOT;
 
-    public const HELP_OPT_NO_REGISTER = <<< 'EOT'
-When this flag is present, the command WILL NOT register the factory
-with the application container.
-EOT;
+    /**
+     * @var string
+     */
+    public const HELP_OPT_NO_REGISTER = <<<'EOT'
+        When this flag is present, the command WILL NOT register the factory
+        with the application container.
+        EOT;
+
+    /** @var null|string Cannot be defined explicitly due to parent class */
+    public static $defaultName = 'mezzio:factory:create';
+
+    public function __construct(private Create $generator, private string $projectRoot)
+    {
+        parent::__construct();
+    }
 
     /**
      * Configure the console command.
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this->setDescription('Create a factory class file for the named class.');
         $this->setHelp(self::HELP);
@@ -45,21 +68,20 @@ EOT;
     /**
      * Execute console command.
      */
-    protected function execute(InputInterface $input, OutputInterface $output) : int
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $className = $input->getArgument('class');
-        $factoryName = $className . 'Factory';
+        $className       = (string) $input->getArgument('class');
+        $factoryName     = $className . 'Factory';
         $registerFactory = ! $input->getOption('no-register');
-        $configFile = null;
+        $configFile      = null;
 
         $output->writeln(sprintf('<info>Creating factory for class %s...</info>', $className));
 
-        $generator = new Create();
-        $path = $generator->createForClass($className);
+        $path = $this->generator->createForClass($className);
 
         if ($registerFactory) {
             $output->writeln('<info>Registering factory with container</info>');
-            $injector = new ConfigInjector();
+            $injector   = new ConfigInjector($this->projectRoot);
             $configFile = $injector->injectFactoryForClass($factoryName, $className);
         }
 

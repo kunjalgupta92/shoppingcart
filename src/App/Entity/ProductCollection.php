@@ -2,8 +2,8 @@
 
 namespace App\Entity;
 
-use Doctrine\ORM\Tools\Pagination\Paginator;
+use Doctrine\Common\Collections\ArrayCollection;
 
-class ProductCollection extends Paginator
+class ProductCollection extends ArrayCollection
 {
 }

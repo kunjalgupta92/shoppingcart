@@ -13,7 +13,9 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
+use function assert;
 use function implode;
+use function is_array;
 use function is_callable;
 
 /**
@@ -38,6 +40,8 @@ use function is_callable;
  * - and the `Route` instance defines implicit OPTIONS.
  *
  * In all other circumstances, it will return the result of the delegate.
+ *
+ * @final
  */
 class ImplicitOptionsMiddleware implements MiddlewareInterface
 {
@@ -52,7 +56,7 @@ class ImplicitOptionsMiddleware implements MiddlewareInterface
     public function __construct($responseFactory)
     {
         if (is_callable($responseFactory)) {
-            // Factories is wrapped in a closure in order to enforce return type safety.
+            // Factories are wrapped in a closure in order to enforce return type safety.
             $responseFactory = new CallableResponseFactoryDecorator(
                 static function () use ($responseFactory): ResponseInterface {
                     return $responseFactory();
@@ -73,7 +77,7 @@ class ImplicitOptionsMiddleware implements MiddlewareInterface
         }
 
         $result = $request->getAttribute(RouteResult::class);
-        if (! $result) {
+        if (! $result instanceof RouteResult) {
             return $handler->handle($request);
         }
 
@@ -86,6 +90,7 @@ class ImplicitOptionsMiddleware implements MiddlewareInterface
         }
 
         $allowedMethods = $result->getAllowedMethods();
+        assert(is_array($allowedMethods));
 
         return $this->responseFactory->createResponse()->withHeader('Allow', implode(',', $allowedMethods));
     }

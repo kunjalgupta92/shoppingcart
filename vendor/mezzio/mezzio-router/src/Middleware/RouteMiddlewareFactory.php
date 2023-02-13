@@ -8,6 +8,8 @@ use Mezzio\Router\Exception\MissingDependencyException;
 use Mezzio\Router\RouterInterface;
 use Psr\Container\ContainerInterface;
 
+use function assert;
+
 /**
  * Create and return a RouteMiddleware instance.
  *
@@ -15,14 +17,17 @@ use Psr\Container\ContainerInterface;
  *
  * - Mezzio\Router\RouterInterface, which should resolve to
  *   a class implementing that interface.
+ *
+ * @final
  */
 class RouteMiddlewareFactory
 {
-    /** @var string */
-    private $routerServiceName;
+    private string $routerServiceName;
 
     /**
      * Allow serialization
+     *
+     * @param array{routerServiceName?: string} $data
      */
     public static function __set_state(array $data): self
     {
@@ -41,8 +46,7 @@ class RouteMiddlewareFactory
     }
 
     /**
-     * @throws MissingDependencyException If the RouterInterface service is
-     *     missing.
+     * @throws MissingDependencyException If the RouterInterface service is missing.
      */
     public function __invoke(ContainerInterface $container): RouteMiddleware
     {
@@ -53,7 +57,10 @@ class RouteMiddlewareFactory
             );
         }
 
-        return new RouteMiddleware($container->get($this->routerServiceName));
+        $router = $container->get($this->routerServiceName);
+        assert($router instanceof RouterInterface);
+
+        return new RouteMiddleware($router);
     }
 
     /**

@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use App\Handler\ShoppingCartHandler;
 use Mezzio\Application;
 use Mezzio\MiddlewareFactory;
 use Psr\Container\ContainerInterface;
@@ -43,6 +42,10 @@ use Psr\Container\ContainerInterface;
 // };
 
 return function (Application $app, MiddlewareFactory $factory, ContainerInterface $container) : void {
-    $app->get('/products', \App\Handler\ShoppingCartHandler::class, 'products.list');
+    $app->post('/product', \App\Handler\CreateProductHandler::class, 'product.create');
+    $app->get('/products', \App\Handler\ListProductHandler::class, 'products.list');
+    $app->get('/product/:id', \App\Handler\ShowProductHandler::class, 'product.show');
+    $app->put('/product/:id', \App\Handler\UpdateProductHandler::class, 'product.update');
+    $app->delete('/product/:id', \App\Handler\DeleteProductHandler::class, 'product.delete');
 };
 

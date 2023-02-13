@@ -1,10 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laminas\View\Helper;
 
 use Laminas\Stdlib\ArrayUtils;
 use Laminas\View\Exception;
 use Traversable;
+
+use function func_num_args;
+use function gettype;
+use function is_array;
+use function is_object;
+use function method_exists;
+use function sprintf;
 
 /**
  * Helper for rendering a template fragment in its own variable scope; iterates
@@ -21,17 +30,15 @@ class PartialLoop extends Partial
 
     /**
      * The current nesting level
-     *
-     * @var int
      */
-    private $nestingLevel = 0;
+    private int $nestingLevel = 0;
 
     /**
      * Stack with object keys for each nested level
      *
      * @var array indexed by nesting level
      */
-    private $objectKeyStack = [
+    private array $objectKeyStack = [
         0 => null,
     ];
 
@@ -48,7 +55,7 @@ class PartialLoop extends Partial
      */
     public function __invoke($name = null, $values = null)
     {
-        if (0 == func_num_args()) {
+        if (0 === func_num_args()) {
             return $this;
         }
         return $this->loop($name, $values);
@@ -67,7 +74,7 @@ class PartialLoop extends Partial
     {
         // reset the counter if it's called again
         $this->partialCounter = 0;
-        $content = '';
+        $content              = '';
 
         foreach ($this->extractViewVariables($values) as $item) {
             $this->nestObjectKey();
@@ -97,7 +104,6 @@ class PartialLoop extends Partial
      * {@inheritDoc}
      *
      * @param string|null $key
-     *
      * @return self
      */
     public function setObjectKey($key)
@@ -144,7 +150,6 @@ class PartialLoop extends Partial
 
     /**
      * @param mixed $values
-     *
      * @return array Variables to populate in the view
      */
     private function extractViewVariables($values)
@@ -163,7 +168,7 @@ class PartialLoop extends Partial
 
         throw new Exception\InvalidArgumentException(sprintf(
             'PartialLoop helper requires iterable data, %s given',
-            is_object($values) ? get_class($values) : gettype($values)
+            is_object($values) ? $values::class : gettype($values)
         ));
     }
 }

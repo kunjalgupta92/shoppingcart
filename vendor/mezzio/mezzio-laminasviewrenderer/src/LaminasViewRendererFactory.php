@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace Mezzio\LaminasView;
 
-use Interop\Container\ContainerInterface as InteropContainerInterface;
 use Laminas\View\HelperPluginManager;
 use Laminas\View\Renderer\PhpRenderer;
 use Laminas\View\Resolver;
 use Mezzio\Helper\ServerUrlHelper as BaseServerUrlHelper;
 use Mezzio\Helper\UrlHelper as BaseUrlHelper;
+use Mezzio\LaminasView\ServerUrlHelper;
+use Mezzio\LaminasView\UrlHelper;
 use Psr\Container\ContainerInterface;
 
-use function get_class;
 use function is_array;
 use function is_numeric;
 use function sprintf;
@@ -65,8 +65,8 @@ class LaminasViewRendererFactory
         // Create or retrieve the renderer from the container
         $renderer = $container->has(PhpRenderer::class)
             ? $container->get(PhpRenderer::class)
-            : ($container->has(\Zend\View\Renderer\PhpRenderer::class)
-                ? $container->get(\Zend\View\Renderer\PhpRenderer::class)
+            : ($container->has('Zend\View\Renderer\PhpRenderer')
+                ? $container->get('Zend\View\Renderer\PhpRenderer')
                 : new PhpRenderer());
         $renderer->setResolver($resolver);
 
@@ -97,8 +97,6 @@ class LaminasViewRendererFactory
      *
      * In each case, injects with the custom url/serverurl implementations.
      *
-     * @throws Exception\InvalidContainerException If the $container argument
-     *     does not implement InteropContainerInterface.
      * @throws Exception\MissingHelperException
      */
     private function injectHelpers(PhpRenderer $renderer, ContainerInterface $container): void
@@ -106,10 +104,10 @@ class LaminasViewRendererFactory
         $helpers = $this->retrieveHelperManager($container);
         $helpers->setAlias('url', BaseUrlHelper::class);
         $helpers->setAlias('Url', BaseUrlHelper::class);
-        $helpers->setFactory(BaseUrlHelper::class, function () use ($container) {
+        $helpers->setFactory(BaseUrlHelper::class, static function () use ($container): UrlHelper {
             if (
                 ! $container->has(BaseUrlHelper::class)
-                && ! $container->has(\Zend\Expressive\Helper\UrlHelper::class)
+                && ! $container->has('Zend\Expressive\Helper\UrlHelper')
             ) {
                 throw new Exception\MissingHelperException(sprintf(
                     'An instance of %s is required in order to create the "url" view helper; not found',
@@ -119,17 +117,17 @@ class LaminasViewRendererFactory
             return new UrlHelper(
                 $container->has(BaseUrlHelper::class)
                     ? $container->get(BaseUrlHelper::class)
-                    : $container->get(\Zend\Expressive\Helper\UrlHelper::class)
+                    : $container->get('Zend\Expressive\Helper\UrlHelper')
             );
         });
 
         $helpers->setAlias('serverurl', BaseServerUrlHelper::class);
         $helpers->setAlias('serverUrl', BaseServerUrlHelper::class);
         $helpers->setAlias('ServerUrl', BaseServerUrlHelper::class);
-        $helpers->setFactory(BaseServerUrlHelper::class, function () use ($container) {
+        $helpers->setFactory(BaseServerUrlHelper::class, static function () use ($container): ServerUrlHelper {
             if (
                 ! $container->has(BaseServerUrlHelper::class)
-                && ! $container->has(\Zend\Expressive\Helper\ServerUrlHelper::class)
+                && ! $container->has('Zend\Expressive\Helper\ServerUrlHelper')
             ) {
                 throw new Exception\MissingHelperException(sprintf(
                     'An instance of %s is required in order to create the "url" view helper; not found',
@@ -139,37 +137,21 @@ class LaminasViewRendererFactory
             return new ServerUrlHelper(
                 $container->has(BaseServerUrlHelper::class)
                     ? $container->get(BaseServerUrlHelper::class)
-                    : $container->get(\Zend\Expressive\Helper\ServerUrlHelper::class)
+                    : $container->get('Zend\Expressive\Helper\ServerUrlHelper')
             );
         });
 
         $renderer->setHelperPluginManager($helpers);
     }
 
-    /**
-     * @throws Exception\InvalidContainerException If the $container argument
-     *     does not implement InteropContainerInterface.
-     */
     private function retrieveHelperManager(ContainerInterface $container): HelperPluginManager
     {
         if ($container->has(HelperPluginManager::class)) {
             return $container->get(HelperPluginManager::class);
         }
 
-        if ($container->has(\Zend\View\HelperPluginManager::class)) {
-            return $container->get(\Zend\View\HelperPluginManager::class);
-        }
-
-        if (! $container instanceof InteropContainerInterface) {
-            throw new Exception\InvalidContainerException(sprintf(
-                '%s expects a %s instance to its constructor; however, your service'
-                . ' container is an instance of %s, which does not implement that'
-                . ' interface. Consider switching to laminas-servicemanager for your'
-                . ' container implementation if you wish to use the laminas-view renderer.',
-                HelperPluginManager::class,
-                InteropContainerInterface::class,
-                get_class($container)
-            ));
+        if ($container->has('Zend\View\HelperPluginManager')) {
+            return $container->get('Zend\View\HelperPluginManager');
         }
 
         return new HelperPluginManager($container);

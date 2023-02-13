@@ -9,19 +9,20 @@ use RecursiveIteratorIterator;
 use SplFileInfo;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ConvertMiddleware
-{
-    /**
-     * @var OutputInterface
-     */
-    private $output;
+use function file_get_contents;
+use function file_put_contents;
+use function preg_match;
+use function preg_quote;
+use function preg_replace;
+use function sprintf;
 
-    public function __construct(OutputInterface $output)
+final class ConvertMiddleware
+{
+    public function __construct(private OutputInterface $output)
     {
-        $this->output = $output;
     }
 
-    public function process(string $directory) : void
+    public function process(string $directory): void
     {
         $rdi = new RecursiveDirectoryIterator($directory);
         $rii = new RecursiveIteratorIterator($rdi);
@@ -35,24 +36,35 @@ class ConvertMiddleware
         }
     }
 
-    private function isPhpFile(SplFileInfo $file) : bool
+    private function isPhpFile(SplFileInfo $file): bool
     {
-        return $file->isFile()
-            && $file->getExtension() === 'php'
-            && $file->isReadable()
-            && $file->isWritable();
+        if (! $file->isFile()) {
+            return false;
+        }
+
+        if ($file->getExtension() !== 'php') {
+            return false;
+        }
+
+        if (! $file->isReadable()) {
+            return false;
+        }
+
+        return $file->isWritable();
     }
 
-    private function processFile(string $filename) : void
+    private function processFile(string $filename): void
     {
         $original = file_get_contents($filename);
         $contents = $original;
 
-        if (! preg_match(
-            '#use\s+Psr\\\\Http\\\\Server\\\\MiddlewareInterface(\s*)(?<end>;|as\s*(?<alias>[^;\s]+)\s*;)#',
-            $contents,
-            $matches
-        )) {
+        if (
+            ! preg_match(
+                '#use\s+Psr\\\\Http\\\\Server\\\\MiddlewareInterface(\s*)(?<end>;|as\s*(?<alias>[^;\s]+)\s*;)#',
+                $contents,
+                $matches
+            )
+        ) {
             return;
         }
 
@@ -60,16 +72,18 @@ class ConvertMiddleware
             ? 'MiddlewareInterface'
             : $matches['alias'];
 
-        if (! preg_match(
-            '#public\s+function\s+process\s*\(.*?,[^)]*(?<var>\$\w+)\s*\)#s',
-            $contents,
-            $matches
-        )) {
+        if (
+            ! preg_match(
+                '#public\s+function\s+process\s*\(.*?,[^)]*(?<var>\$\w+)\s*\)#s',
+                $contents,
+                $matches
+            )
+        ) {
             return;
         }
 
         $var = preg_quote($matches['var'], '#');
-        if (preg_match('#' . $var . '\s*->\s*handle\s*\(' . '#', $contents)) {
+        if (preg_match('#' . $var . '\s*->\s*handle\s*\(#', $contents)) {
             $this->output->writeln(sprintf(
                 '<comment>- Skipping %s; request handler usage detected</comment>',
                 $filename

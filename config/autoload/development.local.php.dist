@@ -32,8 +32,4 @@ return [
             'ajax_only'  => true,
         ],
     ],
-    'db' => [
-        'username' => 'root',
-        'password' => '123',
-    ]
 ];

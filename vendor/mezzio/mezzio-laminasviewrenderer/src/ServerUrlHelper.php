@@ -5,20 +5,21 @@ declare(strict_types=1);
 namespace Mezzio\LaminasView;
 
 use Laminas\View\Helper\AbstractHelper;
+use Laminas\View\Helper\DeprecatedAbstractHelperHierarchyTrait;
 use Mezzio\Helper\ServerUrlHelper as BaseHelper;
 use Psr\Http\Message\UriInterface;
 
 /**
  * Alternate ServerUrl helper for use in Mezzio.
+ *
+ * @final
  */
 class ServerUrlHelper extends AbstractHelper
 {
-    /** @var BaseHelper */
-    private $helper;
+    use DeprecatedAbstractHelperHierarchyTrait;
 
-    public function __construct(BaseHelper $helper)
+    public function __construct(private BaseHelper $helper)
     {
-        $this->helper = $helper;
     }
 
     /**

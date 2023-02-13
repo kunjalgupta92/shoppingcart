@@ -10,9 +10,10 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Product
 {
-    /**
-     *
-     * @ORM\Column(type="integer", nullable=false)
+     /**
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     * @ORM\Column(type="integer", unique=true)
      */
     protected $id;
 

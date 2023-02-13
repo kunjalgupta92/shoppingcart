@@ -18,23 +18,31 @@
         "forum": "https://discourse.laminas.dev"
     },
     "config": {
-        "sort-packages": true
+        "sort-packages": true,
+        "platform": {
+            "php": "8.0.99"
+        },
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "composer/package-versions-deprecated": true
+        }
     },
     "extra": {
     },
     "require": {
-        "php": "^7.3 || ~8.0.0 || ~8.1.0"
+        "php": "~8.0.0 || ~8.1.0 || ~8.2.0"
     },
     "require-dev": {
-        "container-interop/container-interop": "^1.1",
-        "laminas/laminas-coding-standard": "~2.2.1",
-        "laminas/laminas-stdlib": "^3.6",
-        "phpbench/phpbench": "^1.1",
-        "phpspec/prophecy-phpunit": "^2.0",
-        "phpunit/phpunit": "^9.5.5"
+        "laminas/laminas-coding-standard": "~2.5.0",
+        "laminas/laminas-stdlib": "^3.15",
+        "phpbench/phpbench": "^1.2.7",
+        "phpunit/phpunit": "^9.5.26",
+        "psalm/plugin-phpunit": "^0.18.0",
+        "psr/container": "^1.1.2 || ^2.0.2",
+        "vimeo/psalm": "^5.0.0"
     },
     "suggest": {
-        "container-interop/container-interop": "^1.1, to use the lazy listeners feature",
+        "psr/container": "^1.1.2 || ^2.0.2, to use the lazy listeners feature",
         "laminas/laminas-stdlib": "^2.7.3 || ^3.0, to use the FilterChain feature"
     },
     "autoload": {
@@ -45,11 +53,9 @@
     "autoload-dev": {
         "psr-4": {
             "LaminasTest\\EventManager\\": "test/",
-            "LaminasBench\\EventManager\\": "benchmarks/"
-        },
-        "files": [
-            "test/_autoload.php"
-        ]
+            "LaminasBench\\EventManager\\": "benchmarks/",
+            "LaminasPsalm\\EventManager\\": "psalm/"
+        }
     },
     "scripts": {
         "benchmark": "phpbench run --revs=2 --iterations=2 --report=aggregate",
@@ -60,9 +66,11 @@
         "cs-check": "phpcs",
         "cs-fix": "phpcbf",
         "test": "phpunit --colors=always",
-        "test-coverage": "phpunit --colors=always --coverage-clover clover.xml"
+        "test-coverage": "phpunit --colors=always --coverage-clover clover.xml",
+        "static-analysis": "psalm --shepherd --stats"
     },
     "conflict": {
+        "container-interop/container-interop": "<1.2",
         "zendframework/zend-eventmanager": "*"
     }
 }

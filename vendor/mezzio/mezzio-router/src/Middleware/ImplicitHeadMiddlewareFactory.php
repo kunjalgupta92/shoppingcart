@@ -8,7 +8,6 @@ use Mezzio\Router\Exception\MissingDependencyException;
 use Mezzio\Router\RouterInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\StreamInterface;
-use Zend\Expressive\Router\RouterInterface as ZendExpressiveRouterInterface;
 
 /**
  * Create and return an ImplicitHeadMiddleware instance.
@@ -19,6 +18,8 @@ use Zend\Expressive\Router\RouterInterface as ZendExpressiveRouterInterface;
  *   instance of that interface.
  * - Psr\Http\Message\StreamInterface, which should resolve to a callable
  *   that will produce an empty Psr\Http\Message\StreamInterface instance.
+ *
+ * @final
  */
 class ImplicitHeadMiddlewareFactory
 {
@@ -28,17 +29,7 @@ class ImplicitHeadMiddlewareFactory
      */
     public function __invoke(ContainerInterface $container): ImplicitHeadMiddleware
     {
-        $hasRouter           = $container->has(RouterInterface::class);
-        $hasDeprecatedRouter = false;
-
-        if (! $hasRouter) {
-            $hasDeprecatedRouter = $container->has(ZendExpressiveRouterInterface::class);
-        }
-
-        if (
-            ! $hasRouter
-            && ! $hasDeprecatedRouter
-        ) {
+        if (! $container->has(RouterInterface::class)) {
             throw MissingDependencyException::dependencyForService(
                 RouterInterface::class,
                 ImplicitHeadMiddleware::class
@@ -53,9 +44,7 @@ class ImplicitHeadMiddlewareFactory
         }
 
         return new ImplicitHeadMiddleware(
-            $hasRouter
-                ? $container->get(RouterInterface::class)
-                : $container->get(ZendExpressiveRouterInterface::class),
+            $container->get(RouterInterface::class),
             $container->get(StreamInterface::class)
         );
     }

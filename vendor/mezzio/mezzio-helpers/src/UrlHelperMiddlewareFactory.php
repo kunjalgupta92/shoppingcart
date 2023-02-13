@@ -6,15 +6,15 @@ namespace Mezzio\Helper;
 
 use Psr\Container\ContainerInterface;
 
+use function assert;
 use function sprintf;
 
 class UrlHelperMiddlewareFactory
 {
-    /** @var string */
-    private $urlHelperServiceName;
-
     /**
      * Allow serialization
+     *
+     * @param array{urlHelperServiceName?: string} $data
      */
     public static function __set_state(array $data): self
     {
@@ -26,9 +26,8 @@ class UrlHelperMiddlewareFactory
     /**
      * Allow varying behavior based on URL helper service name.
      */
-    public function __construct(string $urlHelperServiceName = UrlHelper::class)
+    public function __construct(private string $urlHelperServiceName = UrlHelper::class)
     {
-        $this->urlHelperServiceName = $urlHelperServiceName;
     }
 
     /**
@@ -46,6 +45,9 @@ class UrlHelperMiddlewareFactory
             ));
         }
 
-        return new UrlHelperMiddleware($container->get($this->urlHelperServiceName));
+        $helper = $container->get($this->urlHelperServiceName);
+        assert($helper instanceof UrlHelper);
+
+        return new UrlHelperMiddleware($helper);
     }
 }

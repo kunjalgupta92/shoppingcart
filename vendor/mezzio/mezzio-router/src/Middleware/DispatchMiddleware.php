@@ -17,13 +17,15 @@ use Psr\Http\Server\RequestHandlerInterface;
  * delegates request processing to the handler.
  *
  * Otherwise, it delegates processing to the route result.
+ *
+ * @final
  */
 class DispatchMiddleware implements MiddlewareInterface
 {
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         $routeResult = $request->getAttribute(RouteResult::class, false);
-        if (! $routeResult) {
+        if (! $routeResult instanceof RouteResult) {
             return $handler->handle($request);
         }
 

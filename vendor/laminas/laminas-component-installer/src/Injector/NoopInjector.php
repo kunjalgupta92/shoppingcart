@@ -1,8 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laminas\ComponentInstaller\Injector;
 
-class NoopInjector implements InjectorInterface
+/**
+ * @internal
+ */
+final class NoopInjector implements InjectorInterface
 {
     /**
      * {@inheritDoc}
@@ -10,7 +15,7 @@ class NoopInjector implements InjectorInterface
      * @param int $type
      * @return true
      */
-    public function registersType($type)
+    public function registersType(int $type): bool
     {
         return true;
     }
@@ -18,16 +23,15 @@ class NoopInjector implements InjectorInterface
     /**
      * {@inheritDoc}
      */
-    public function getTypesAllowed()
+    public function getTypesAllowed(): array
     {
         return [];
     }
 
     /**
-     * @param string $package
-     * @return false
+     * @param non-empty-string $package
      */
-    public function isRegistered($package)
+    public function isRegistered(string $package): bool
     {
         return false;
     }
@@ -35,7 +39,7 @@ class NoopInjector implements InjectorInterface
     /**
      * {@inheritDoc}
      */
-    public function inject($package, $type)
+    public function inject(string $package, int $type): bool
     {
         return false;
     }
@@ -43,7 +47,7 @@ class NoopInjector implements InjectorInterface
     /**
      * {@inheritDoc}
      */
-    public function remove($package)
+    public function remove(string $package): bool
     {
         return false;
     }
@@ -51,7 +55,7 @@ class NoopInjector implements InjectorInterface
     /**
      * {@inheritDoc}
      */
-    public function setApplicationModules(array $modules)
+    public function setApplicationModules(array $modules): self
     {
         return $this;
     }
@@ -59,7 +63,7 @@ class NoopInjector implements InjectorInterface
     /**
      * {@inheritDoc}
      */
-    public function setModuleDependencies(array $modules)
+    public function setModuleDependencies(array $modules): self
     {
         return $this;
     }

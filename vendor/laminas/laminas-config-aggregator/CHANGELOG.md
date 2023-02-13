@@ -2,6 +2,129 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
+## 1.13.0 - 2022-12-03
+
+
+-----
+
+### Release Notes for [1.13.0](https://github.com/laminas/laminas-config-aggregator/milestone/23)
+
+Feature release (minor)
+
+### 1.13.0
+
+- Total issues resolved: **0**
+- Total pull requests resolved: **2**
+- Total contributors: **2**
+
+#### renovate
+
+ - [30: Update dependency vimeo/psalm to v5](https://github.com/laminas/laminas-config-aggregator/pull/30) thanks to @renovate[bot]
+
+#### Enhancement
+
+ - [28: Add ability to preprocess the list of providers](https://github.com/laminas/laminas-config-aggregator/pull/28) thanks to @internalsystemerror
+
+## 1.12.0 - 2022-11-22
+
+
+-----
+
+### Release Notes for [1.12.0](https://github.com/laminas/laminas-config-aggregator/milestone/21)
+
+Feature release (minor)
+
+### 1.12.0
+
+- Total issues resolved: **0**
+- Total pull requests resolved: **1**
+- Total contributors: **1**
+
+#### Documentation,Enhancement
+
+ - [29: Some minor type improvements](https://github.com/laminas/laminas-config-aggregator/pull/29) thanks to @internalsystemerror
+
+## 1.11.0 - 2022-10-11
+
+
+-----
+
+### Release Notes for [1.11.0](https://github.com/laminas/laminas-config-aggregator/milestone/19)
+
+Feature release (minor)
+
+### 1.11.0
+
+- Total issues resolved: **0**
+- Total pull requests resolved: **1**
+- Total contributors: **1**
+
+#### Enhancement
+
+ - [27: Apply PHP 8.0 Syntax and constructor promotion](https://github.com/laminas/laminas-config-aggregator/pull/27) thanks to @samsonasik
+
+## 1.10.0 - 2022-10-11
+
+
+-----
+
+### Release Notes for [1.10.0](https://github.com/laminas/laminas-config-aggregator/milestone/17)
+
+Feature release (minor)
+
+### 1.10.0
+
+- Total issues resolved: **0**
+- Total pull requests resolved: **1**
+- Total contributors: **1**
+
+#### Enhancement
+
+ - [26: Add support for PHP 8.2, Remove support for PHP 7.4](https://github.com/laminas/laminas-config-aggregator/pull/26) thanks to @gsteel
+
+## 1.9.0 - 2022-09-15
+
+
+-----
+
+### Release Notes for [1.9.0](https://github.com/laminas/laminas-config-aggregator/milestone/15)
+
+Feature release (minor)
+
+### 1.9.0
+
+- Total issues resolved: **0**
+- Total pull requests resolved: **1**
+- Total contributors: **1**
+
+#### Enhancement
+
+ - [24: Apply PHP 7.4 syntax and typed property](https://github.com/laminas/laminas-config-aggregator/pull/24) thanks to @samsonasik
+
+## 1.8.0 - 2022-07-24
+
+
+-----
+
+### Release Notes for [1.8.0](https://github.com/laminas/laminas-config-aggregator/milestone/13)
+
+Feature release (minor)
+
+### 1.8.0
+
+- Total issues resolved: **0**
+- Total pull requests resolved: **3**
+- Total contributors: **3**
+
+#### Enhancement
+
+ - [22: Drop Support for PHP 7.3](https://github.com/laminas/laminas-config-aggregator/pull/22) thanks to @gsteel
+ - [20: Prepare for Renovate with reusable workflows](https://github.com/laminas/laminas-config-aggregator/pull/20) thanks to @ghostwriter
+
+#### renovate
+
+ - [21: Configure Renovate](https://github.com/laminas/laminas-config-aggregator/pull/21) thanks to @renovate[bot]
+
 ## 1.7.0 - 2021-10-26
 
 

@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace Mezzio\LaminasView;
 
+use Laminas\ServiceManager\ConfigInterface;
 use Laminas\View\HelperPluginManager;
 use Mezzio\Template\TemplateRendererInterface;
-use Zend\Expressive\ZendView\ZendViewRenderer;
 
+/**
+ * @psalm-import-type ServiceManagerConfigurationType from ConfigInterface
+ */
 class ConfigProvider
 {
     public function __invoke(): array
@@ -18,6 +21,7 @@ class ConfigProvider
         ];
     }
 
+    /** @return ServiceManagerConfigurationType */
     public function getDependencies(): array
     {
         return [
@@ -25,9 +29,9 @@ class ConfigProvider
                 TemplateRendererInterface::class => LaminasViewRenderer::class,
 
                 // Legacy Zend Framework aliases
-                \Zend\Expressive\Template\TemplateRendererInterface::class => TemplateRendererInterface::class,
-                \Zend\View\HelperPluginManager::class                      => HelperPluginManager::class,
-                ZendViewRenderer::class                                    => LaminasViewRenderer::class,
+                'Zend\Expressive\Template\TemplateRendererInterface' => TemplateRendererInterface::class,
+                'Zend\View\HelperPluginManager'                      => HelperPluginManager::class,
+                'Zend\Expressive\ZendView\ZendViewRenderer'          => LaminasViewRenderer::class,
             ],
             'factories' => [
                 HelperPluginManager::class => HelperPluginManagerFactory::class,

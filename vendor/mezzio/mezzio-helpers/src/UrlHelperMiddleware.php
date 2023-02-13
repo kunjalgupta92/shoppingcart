@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Mezzio\Helper;
 
+use Mezzio\Helper\UrlHelper;
 use Mezzio\Router\RouteResult;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -15,12 +16,8 @@ use Psr\Http\Server\RequestHandlerInterface;
  */
 class UrlHelperMiddleware implements MiddlewareInterface
 {
-    /** @var UrlHelper */
-    private $helper;
-
-    public function __construct(UrlHelper $helper)
+    public function __construct(private UrlHelper $helper)
     {
-        $this->helper = $helper;
     }
 
     /**

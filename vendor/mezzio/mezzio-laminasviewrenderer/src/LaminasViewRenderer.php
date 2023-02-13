@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Mezzio\LaminasView;
 
+use Laminas\Stdlib\SplStack;
 use Laminas\View\Helper;
 use Laminas\View\Model\ModelInterface;
 use Laminas\View\Model\ViewModel;
@@ -16,7 +17,6 @@ use Mezzio\Template\Exception;
 use Mezzio\Template\TemplatePath;
 use Mezzio\Template\TemplateRendererInterface;
 
-use function get_class;
 use function gettype;
 use function is_int;
 use function is_object;
@@ -38,14 +38,9 @@ class LaminasViewRenderer implements TemplateRendererInterface
     use ArrayParametersTrait;
     use DefaultParamsTrait;
 
-    /** @var ViewModel */
-    private $layout;
-
-    /** @var RendererInterface */
-    private $renderer;
-
-    /** @var NamespacedPathStackResolver */
-    private $resolver;
+    private ?ViewModel $layout = null;
+    private RendererInterface $renderer;
+    private NamespacedPathStackResolver $resolver;
 
     /**
      * Constructor
@@ -92,7 +87,7 @@ class LaminasViewRenderer implements TemplateRendererInterface
             throw new Exception\InvalidArgumentException(sprintf(
                 'Layout must be a string layout template name or a %s instance; received %s',
                 ModelInterface::class,
-                is_object($layout) ? get_class($layout) : gettype($layout)
+                is_object($layout) ? $layout::class : gettype($layout)
             ));
         }
 
@@ -149,7 +144,12 @@ class LaminasViewRenderer implements TemplateRendererInterface
     {
         $paths = [];
 
-        foreach ($this->resolver->getPaths() as $namespace => $namespacedPaths) {
+        /**
+         * @var array<array-key, SplStack<string>> $pathStack
+         * @psalm-suppress DocblockTypeContradiction
+         */
+        $pathStack = $this->resolver->getPaths();
+        foreach ($pathStack as $namespace => $namespacedPaths) {
             if (
                 $namespace === NamespacedPathStackResolver::DEFAULT_NAMESPACE
                 || empty($namespace)
@@ -170,10 +170,9 @@ class LaminasViewRenderer implements TemplateRendererInterface
      * Create a view model from the template and parameters.
      *
      * @param string $name
-     * @param mixed $params
      * @return ModelInterface
      */
-    private function createModel($name, $params)
+    private function createModel($name, mixed $params)
     {
         $params = $this->mergeParams($name, $this->normalizeParams($params));
         $model  = new ViewModel($params);
@@ -258,13 +257,7 @@ class LaminasViewRenderer implements TemplateRendererInterface
 
     private function hasNamespacedResolver(AggregateResolver $aggregate): bool
     {
-        foreach ($aggregate as $resolver) {
-            if ($resolver instanceof NamespacedPathStackResolver) {
-                return true;
-            }
-        }
-
-        return false;
+        return $this->getNamespacedResolver($aggregate) !== null;
     }
 
     private function getNamespacedResolver(AggregateResolver $aggregate): ?NamespacedPathStackResolver

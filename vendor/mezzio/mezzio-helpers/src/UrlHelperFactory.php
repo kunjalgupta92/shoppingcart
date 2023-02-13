@@ -7,18 +7,15 @@ namespace Mezzio\Helper;
 use Mezzio\Router\RouterInterface;
 use Psr\Container\ContainerInterface;
 
+use function assert;
 use function sprintf;
 
 class UrlHelperFactory
 {
-    /** @var string Base path for the URL helper */
-    private $basePath;
-
-    /** @var string $routerServiceName */
-    private $routerServiceName;
-
     /**
      * Allow serialization
+     *
+     * @param array{basePath?: string, routerServiceName?: string} $data
      */
     public static function __set_state(array $data): self
     {
@@ -32,11 +29,13 @@ class UrlHelperFactory
      * Allows varying behavior per-instance.
      *
      * Defaults to '/' for the base path, and the FQCN of the RouterInterface.
+     *
+     * @param string $basePath Base path for the URL helper
      */
-    public function __construct(string $basePath = '/', string $routerServiceName = RouterInterface::class)
-    {
-        $this->basePath          = $basePath;
-        $this->routerServiceName = $routerServiceName;
+    public function __construct(
+        private string $basePath = '/',
+        private string $routerServiceName = RouterInterface::class
+    ) {
     }
 
     /**
@@ -54,7 +53,9 @@ class UrlHelperFactory
             ));
         }
 
-        $helper = new UrlHelper($container->get($this->routerServiceName));
+        $router = $container->get($this->routerServiceName);
+        assert($router instanceof RouterInterface);
+        $helper = new UrlHelper($router);
         $helper->setBasePath($this->basePath);
         return $helper;
     }

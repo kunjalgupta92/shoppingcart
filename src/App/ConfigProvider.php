@@ -10,8 +10,8 @@ use Laminas\Hydrator\ReflectionHydrator;
 use Mezzio\Hal\Metadata\RouteBasedCollectionMetadata;
 use Mezzio\Hal\Metadata\RouteBasedResourceMetadata;
 use Mezzio\Hal\Metadata\MetadataMap;
-use App\Handler\ShoppingCartHandler;
-use App\Handler\ShoppingCartHandlerFactory;
+
+
 /**
  * The configuration provider for the App module
  *
@@ -35,47 +35,14 @@ class ConfigProvider
             'invokables' => [
             ],
             'factories'  => [
-                Handler\ShoppingCartHandler::class => Handler\ShoppingCartHandlerFactory::class,
+                Handler\CreateProductHandler::class => Factory\CreateProductHandlerFactory::class,
+                Handler\ListProductHandler::class => Factory\ListProductHandlerFactory::class,
+                Handler\ShowProductHandler::class => Factory\ShowProductHandlerFactory::class,
+                Handler\UpdateProductHandler::class => Factory\UpdateProductHandlerFactory::class,
+                Handler\DeleteProductHandler::class => Factory\DeleteProductHandlerFactory::class,
             ],
         ];
         
-    }
-
-    public function getDoctrineEntities() : array
-    {
-        return [
-            'driver' => [
-                'orm_default' => [
-                    'class' => MappingDriverChain::class,
-                    'drivers' => [
-                        'App\Entity' => 'product_entity',
-                    ],
-                ],
-                'product_entity' => [
-                    'class' => AnnotationDriver::class,
-                    'cache' => 'array',
-                    'paths' => [__DIR__ . '/Entity'],
-                ],
-            ],
-        ];
-    }
-
-    public function getHalMetadataMap()
-    {
-        return [
-            [
-                '__class__'      => RouteBasedResourceMetadata::class,
-                'resource_class' => Entity\Product::class,
-                'route'          => 'products.show', 
-                'extractor'      => ReflectionHydrator::class,
-            ],
-            [
-                '__class__'           => RouteBasedCollectionMetadata::class,
-                'collection_class'    => Entity\ProductCollection::class,
-                'collection_relation' => 'product',
-                'route'               => 'products.list', 
-            ],
-        ];
     }
 
     public function getTemplates(): array
@@ -88,4 +55,52 @@ class ConfigProvider
             ],
         ];
     }
+
+    public function getDoctrineEntities() : array
+    {
+        return [
+            'driver' => [
+
+
+                // defines an annotation driver with two paths, and names it `order_driver`
+                'product_driver' => [
+                    'class' => AnnotationDriver::class,
+                    'cache' => 'array',
+                    'paths' => [
+                        __DIR__.'/Entity',
+                    ],
+                ],
+                'orm_default' => [
+                    // 'class' => MappingDriverChain::class,
+                    'drivers' => [
+                        'App\Entity' => 'product_driver',
+                    ],
+                ],
+                // 'product_entity' => [
+                //     'class' => AnnotationDriver::class,
+                //     'cache' => 'array',
+                //     'paths' => [__DIR__ . '/Entity'],
+                // ],
+            ],
+        ];
+    }
+
+    public function getHalMetadataMap()
+    {
+        return [
+            [
+                '__class__'      => RouteBasedResourceMetadata::class,
+                'resource_class' => Entity\Product::class,
+                'route'          => 'product.show', // assumes a route named 'albums.show' has been created
+                'extractor'      => ReflectionHydrator::class,
+            ],
+            [
+                '__class__'           => RouteBasedCollectionMetadata::class,
+                'collection_class'    => Entity\ProductCollection::class,
+                'collection_relation' => 'product',
+                'route'               => 'products.list', // assumes a route named 'albums.list' has been created
+            ],
+        ];
+    }
+
 }
