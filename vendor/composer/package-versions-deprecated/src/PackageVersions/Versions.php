@@ -79,6 +79,8 @@ final class Versions
   'laminas/laminas-validator' => '2.30.1@b7d217b5e4951955fda9a3a5ada91b717b5c8d5c',
   'laminas/laminas-view' => '2.27.0@b7e66e148ccd55c815b9626ee0cfd358dbb28be4',
   'mezzio/mezzio' => '3.15.0@f1c473acd715d804075cd128b91846db74ca3d14',
+  'mezzio/mezzio-authentication' => '1.7.0@001b081a514f495b711fe44ae4e2be30a1c75181',
+  'mezzio/mezzio-authentication-basic' => '1.6.0@4d6e1c4252df3c52d1a170d24b5ba676e9201689',
   'mezzio/mezzio-hal' => '2.6.0@9e89b556f4f18ba9d10f6e0f7a0d580d418d4323',
   'mezzio/mezzio-helpers' => '5.12.0@e165b3dac9c314ab7f879740ca12455b20716b1d',
   'mezzio/mezzio-laminasrouter' => '3.7.0@6bc10b0e719f3ab462e29118e270ad79b7f5a28e',
@@ -146,7 +148,7 @@ final class Versions
   'symfony/event-dispatcher-contracts' => 'v3.0.2@7bc61cc2db649b4637d331240c5346dcc7708051',
   'symfony/process' => 'v6.0.19@2114fd60f26a296cc403a7939ab91478475a33d4',
   'theseer/tokenizer' => '1.2.1@34a41e998c2183e22995f158c581e7b5e755ab9e',
-  'mezzio/mezzio-skeleton' => 'dev-master@cb5097bb1b2d33da55815ec846f00ed7ae789763',
+  'mezzio/mezzio-skeleton' => 'dev-master@94226810ef3182db17096234c7517f8c30b7a1a4',
 );
 
     private function __construct()

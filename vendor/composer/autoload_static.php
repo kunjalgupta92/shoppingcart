@@ -96,6 +96,8 @@ class ComposerStaticInit8cb49d7dbedf98959fba7d5f9f04bb72
             'Mezzio\\LaminasView\\' => 19,
             'Mezzio\\Helper\\' => 14,
             'Mezzio\\Hal\\' => 11,
+            'Mezzio\\Authentication\\Basic\\' => 28,
+            'Mezzio\\Authentication\\' => 22,
             'Mezzio\\' => 7,
         ),
         'L' => 
@@ -303,6 +305,14 @@ class ComposerStaticInit8cb49d7dbedf98959fba7d5f9f04bb72
         'Mezzio\\Hal\\' => 
         array (
             0 => __DIR__ . '/..' . '/mezzio/mezzio-hal/src',
+        ),
+        'Mezzio\\Authentication\\Basic\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/mezzio/mezzio-authentication-basic/src',
+        ),
+        'Mezzio\\Authentication\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/mezzio/mezzio-authentication/src',
         ),
         'Mezzio\\' => 
         array (

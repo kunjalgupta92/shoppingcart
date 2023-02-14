@@ -1,0 +1,72 @@
+{
+    "name": "mezzio/mezzio-authentication-basic",
+    "description": "HTTP Basic Authentication adapter for mezzio-authentication.",
+    "license": "BSD-3-Clause",
+    "keywords": [
+        "laminas",
+        "mezzio",
+        "authentication",
+        "http-basic"
+    ],
+    "homepage": "https://mezzio.dev",
+    "support": {
+        "docs": "https://docs.mezzio.dev/mezzio-authentication-basic/",
+        "issues": "https://github.com/mezzio/mezzio-authentication-basic/issues",
+        "source": "https://github.com/mezzio/mezzio-authentication-basic",
+        "rss": "https://github.com/mezzio/mezzio-authentication-basic/releases.atom",
+        "chat": "https://laminas.dev/chat",
+        "forum": "https://discourse.laminas.dev"
+    },
+    "config": {
+        "allow-plugins": {
+            "composer/package-versions-deprecated": true,
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        },
+        "platform": {
+            "php": "8.0.99"
+        },
+        "sort-packages": true
+    },
+    "extra": {
+        "laminas": {
+            "config-provider": "Mezzio\\Authentication\\Basic\\ConfigProvider"
+        }
+    },
+    "require": {
+        "php": "~8.0.0 || ~8.1.0 || ~8.2.0",
+        "mezzio/mezzio-authentication": "^1.0",
+        "psr/container": "^1.0 || ^2.0",
+        "psr/http-factory": "^1.0",
+        "psr/http-message": "^1.0.1"
+    },
+    "require-dev": {
+        "laminas/laminas-coding-standard": "~2.4.0",
+        "phpunit/phpunit": "^9.5.25",
+        "psalm/plugin-phpunit": "^0.17.0",
+        "vimeo/psalm": "^4.29"
+    },
+    "autoload": {
+        "psr-4": {
+            "Mezzio\\Authentication\\Basic\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "MezzioTest\\Authentication\\Basic\\": "test/"
+        }
+    },
+    "scripts": {
+        "check": [
+            "@cs-check",
+            "@test"
+        ],
+        "cs-check": "phpcs",
+        "cs-fix": "phpcbf",
+        "test": "phpunit --colors=always --dont-report-useless-tests",
+        "test-coverage": "phpunit --colors=always --coverage-clover clover.xml",
+        "static-analysis": "psalm --shepherd --stats"
+    },
+    "conflict": {
+        "zendframework/zend-expressive-authentication-basic": "*"
+    }
+}

@@ -58,6 +58,8 @@
         "laminas/laminas-servicemanager": "^3.4",
         "laminas/laminas-stdlib": "^3.6",
         "mezzio/mezzio": "^3.7",
+        "mezzio/mezzio-authentication": "^1.7",
+        "mezzio/mezzio-authentication-basic": "^1.6",
         "mezzio/mezzio-hal": "^2.6",
         "mezzio/mezzio-helpers": "^5.7",
         "mezzio/mezzio-laminasrouter": "^3.0.1",

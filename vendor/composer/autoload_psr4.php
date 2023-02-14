@@ -40,6 +40,8 @@ return array(
     'Mezzio\\LaminasView\\' => array($vendorDir . '/mezzio/mezzio-laminasviewrenderer/src'),
     'Mezzio\\Helper\\' => array($vendorDir . '/mezzio/mezzio-helpers/src'),
     'Mezzio\\Hal\\' => array($vendorDir . '/mezzio/mezzio-hal/src'),
+    'Mezzio\\Authentication\\Basic\\' => array($vendorDir . '/mezzio/mezzio-authentication-basic/src'),
+    'Mezzio\\Authentication\\' => array($vendorDir . '/mezzio/mezzio-authentication/src'),
     'Mezzio\\' => array($vendorDir . '/mezzio/mezzio/src'),
     'Laminas\\View\\' => array($vendorDir . '/laminas/laminas-view/src'),
     'Laminas\\Validator\\' => array($vendorDir . '/laminas/laminas-validator/src'),
