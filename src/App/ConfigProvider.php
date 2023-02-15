@@ -84,6 +84,7 @@ class ConfigProvider
                     // 'class' => MappingDriverChain::class,
                     'drivers' => [
                         'App\Entity' => 'product_driver',
+                        'App\Entity' => 'cart_driver',
                     ],
                 ],
                 // 'product_entity' => [
@@ -110,7 +111,18 @@ class ConfigProvider
                 'collection_relation' => 'product',
                 'route'               => 'products.list', // assumes a route named 'albums.list' has been created
             ],
-            
+            [
+                '__class__'      => RouteBasedResourceMetadata::class,
+                'resource_class' => Entity\Cart::class,
+                'route'          => 'cart.show', // assumes a route named 'albums.show' has been created
+                'extractor'      => ReflectionHydrator::class,
+            ],
+            [
+                '__class__'           => RouteBasedCollectionMetadata::class,
+                'collection_class'    => Entity\CartCollection::class,
+                'collection_relation' => 'cart',
+                'route'               => 'cart.list', // assumes a route named 'albums.list' has been created
+            ],
         ];
     }
 

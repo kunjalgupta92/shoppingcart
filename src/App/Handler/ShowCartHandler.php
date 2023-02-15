@@ -12,13 +12,22 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
-class ListCartHandler implements RequestHandlerInterface
+class ShowCartHandler implements RequestHandlerInterface
 {
+    /** @var EntityManager */
     protected $entityManager;
+
+    /** @var HalResponseFactory */
     protected $responseFactory;
+
+    /** @var ResourceGenerator */
     protected $resourceGenerator;
 
-    public function __construct(EntityManager $entityManager,HalResponseFactory $responseFactory,ResourceGenerator $resourceGenerator) {
+    public function __construct(
+        EntityManager $entityManager,
+        HalResponseFactory $responseFactory,
+        ResourceGenerator $resourceGenerator
+    ) {
         $this->entityManager     = $entityManager;
         $this->responseFactory   = $responseFactory;
         $this->resourceGenerator = $resourceGenerator;
@@ -26,18 +35,11 @@ class ListCartHandler implements RequestHandlerInterface
 
     public function handle(ServerRequestInterface $request) : ResponseInterface
     {
-        $repository = $this->entityManager->getRepository(Cart::class);
-        
-        // Note that this removes the call to setMaxResults()
-        
-        $query = $repository
-        ->createQueryBuilder('c')
-        ->getQuery();
-        // Note that we pass the collection class the query result, and not the
-        // query instance:
-        $collection = new CartCollection($query->getResult());
-    
-        $resource  = $this->resourceGenerator->fromObject($collection, $request);
+        $entityRepository = $this->entityManager->getRepository(Cart::class);
+
+        $Cart = $entityRepository->find($request->getAttribute('id'));
+
+        $resource = $this->resourceGenerator->fromObject($Cart, $request);
         return $this->responseFactory->createResponse($request, $resource);
     }
 }

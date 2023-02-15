@@ -51,6 +51,6 @@ return function (Application $app, MiddlewareFactory $factory, ContainerInterfac
 
     $app->post('/cart', \App\Handler\CreateCartHandler::class, 'cart.create');
     $app->get('/cart', \App\Handler\ListCartHandler::class, 'cart.list');
-    
+    $app->get('/cart/:id', \App\Handler\ShowCartHandler::class, 'cart.show');
 };
 
