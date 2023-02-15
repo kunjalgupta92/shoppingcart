@@ -48,5 +48,9 @@ return function (Application $app, MiddlewareFactory $factory, ContainerInterfac
     $app->get('/product/:id', \App\Handler\ShowProductHandler::class, 'product.show');
     $app->put('/product/:id', \App\Handler\UpdateProductHandler::class, 'product.update');
     $app->delete('/product/:id', \App\Handler\DeleteProductHandler::class, 'product.delete');
+
+    $app->post('/cart', \App\Handler\CreateCartHandler::class, 'cart.create');
+    $app->get('/cart', \App\Handler\ListCartHandler::class, 'cart.list');
+    
 };
 

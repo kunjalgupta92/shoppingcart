@@ -42,6 +42,11 @@ class Product
      */
     protected $modified;
 
+     /**
+     * @ORM\OneToMany(targetEntity="Cart", mappedBy="product")
+     */
+    protected $cart;
+
     /**
      * @return int
      */

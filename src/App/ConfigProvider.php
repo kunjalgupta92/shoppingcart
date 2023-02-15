@@ -40,6 +40,9 @@ class ConfigProvider
                 Handler\ShowProductHandler::class => Factory\ShowProductHandlerFactory::class,
                 Handler\UpdateProductHandler::class => Factory\UpdateProductHandlerFactory::class,
                 Handler\DeleteProductHandler::class => Factory\DeleteProductHandlerFactory::class,
+                Handler\CreateCartHandler::class => Factory\CreateCartHandlerFactory::class,
+                Handler\ListCartHandler::class => Factory\ListCartHandlerFactory::class,
+                
             ],
         ];
         
@@ -64,6 +67,13 @@ class ConfigProvider
 
                 // defines an annotation driver with two paths, and names it `order_driver`
                 'product_driver' => [
+                    'class' => AnnotationDriver::class,
+                    'cache' => 'array',
+                    'paths' => [
+                        __DIR__.'/Entity',
+                    ],
+                ],
+                'cart_driver' => [
                     'class' => AnnotationDriver::class,
                     'cache' => 'array',
                     'paths' => [
@@ -100,6 +110,7 @@ class ConfigProvider
                 'collection_relation' => 'product',
                 'route'               => 'products.list', // assumes a route named 'albums.list' has been created
             ],
+            
         ];
     }
 

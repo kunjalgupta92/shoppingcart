@@ -3,8 +3,10 @@ declare(strict_types=1);
 
 namespace App\Handler;
 
+use App\Entity\Cart;
+use App\Entity\User;
 use App\Entity\Product;
-use App\Entity\ProductCollection;
+use App\Entity\CartCollection;
 use Mezzio\Hal\HalResponseFactory;
 use Mezzio\Hal\ResourceGenerator;
 use Doctrine\ORM\EntityManager;
@@ -14,7 +16,7 @@ use Psr\Http\Server\RequestHandlerInterface;
 use Laminas\Http\Request;
 use Laminas\Diactoros\Response\JsonResponse;
 
-class CreateProductHandler implements RequestHandlerInterface
+class CreateCartHandler implements RequestHandlerInterface
 {
     /** @var EntityManager */
     protected $entityManager;
@@ -36,23 +38,24 @@ class CreateProductHandler implements RequestHandlerInterface
         $body = $request->getBody()->getContents();
         $data = json_decode($body, true);
         
-        $productName = $data['name'];
-        $productCode = $data['code'];
-        $productPrice = $data['price'];
+        $userRepository = $this->entityManager->getRepository(User::class);
+        $productRepository = $this->entityManager->getRepository(Product::class);
+
+        $user = $userRepository->find($data['user']);
+        $product = $productRepository->find($data['product']);
+        $quantity = $data['quantity'];
         
-        $product = new Product();
+        $cart = new Cart();
 
-        $product->setProductName($productName);
-        $product->setProductCode($productCode);
-        $product->setProductPrice($productPrice);
-        $product->setCreated(new \DateTime());
-        $product->setModified(new \DateTime());
+        $cart->setUser($user);
+        $cart->setProduct($product);
+        $cart->setQuantity($quantity);
 
-        $this->entityManager->persist($product);
+        $this->entityManager->persist($cart);
         $this->entityManager->flush();
 
         $response = new JsonResponse([
-            'status' => 'New product created',
+            'status' => 'New item added to cart',
             'data' => $data
         ]);
         return $response;
