@@ -10,8 +10,8 @@ SET NAMES utf8mb4;
 DROP TABLE IF EXISTS `cart`;
 CREATE TABLE `cart` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `user_id` int DEFAULT NULL,
-  `product_id` int DEFAULT NULL,
+  `user_id` int NOT NULL,
+  `product_id` int NOT NULL,
   `quantity` int NOT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
@@ -51,13 +51,13 @@ DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
   `id` int NOT NULL AUTO_INCREMENT,
   `username` varchar(255) NOT NULL,
-  `password` text NOT NULL,
-  `role` varchar(255) NOT NULL DEFAULT 'user',
+  `password` varchar(255) NOT NULL,
+  `role` varchar(50) NOT NULL DEFAULT 'user',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 INSERT INTO `users` (`id`, `username`, `password`, `role`) VALUES
-(1,	'user1',	'$2a$06$Nt2zePoCfApfBGrfZbHZIudIwZpCNqorTjbKNZtPoLCVic8goZDsi',	'user'),
-(2,	'user2',	'$2a$06$Nt2zePoCfApfBGrfZbHZIudIwZpCNqorTjbKNZtPoLCVic8goZDsi',	'user');
+(1,	'user1@gmail.com',	'$2a$06$Nt2zePoCfApfBGrfZbHZIudIwZpCNqorTjbKNZtPoLCVic8goZDsi',	'user'),
+(2,	'user2@gmail.com',	'$2a$06$Nt2zePoCfApfBGrfZbHZIudIwZpCNqorTjbKNZtPoLCVic8goZDsi',	'user');
 
 -- 2023-02-15 06:14:12

@@ -42,7 +42,7 @@ class ConfigProvider
                 Handler\DeleteProductHandler::class => Factory\DeleteProductHandlerFactory::class,
                 Handler\CreateCartHandler::class => Factory\CreateCartHandlerFactory::class,
                 Handler\ListCartHandler::class => Factory\ListCartHandlerFactory::class,
-                
+                Handler\ShowCartHandler::class => Factory\ShowCartHandlerFactory::class,
             ],
         ];
         

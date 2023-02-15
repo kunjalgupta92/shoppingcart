@@ -42,7 +42,7 @@ use Psr\Container\ContainerInterface;
 // };
 
 return function (Application $app, MiddlewareFactory $factory, ContainerInterface $container) : void {
-    $app->post('/login',Mezzio\Authentication\AuthenticationMiddleware::class);
+    
     $app->post('/product', \App\Handler\CreateProductHandler::class, 'product.create');
     $app->get('/products', \App\Handler\ListProductHandler::class, 'products.list');
     $app->get('/product/:id', \App\Handler\ShowProductHandler::class, 'product.show');
